@@ -1,0 +1,161 @@
+<% content_for(:title, "Import Users") %>
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6 fw-bold">Import Users</h1>
+        <%= link_to "Back to Users", admin_users_path, class: "btn btn-outline-secondary" %>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Import Users from File</h5>
+        </div>
+        <div class="card-body p-4">
+          <%= form_with url: process_import_admin_users_path, method: :post, local: true, class: "needs-validation" do |form| %>
+            <div class="alert alert-info mb-4">
+              <strong>Bulk Import:</strong> Upload a CSV or Excel file containing user data. The import process will run in the background, and you'll be able to track progress on the dashboard.
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label fw-bold">
+                Select File
+                <span class="text-danger">*</span>
+              </label>
+              <%= form.file_field :file,
+                  class: "form-control form-control-lg",
+                  accept: ".csv,.xlsx,.xls",
+                  required: true,
+                  id: "fileInput" %>
+              <small class="text-muted d-block mt-2">
+                Accepted formats: CSV, XLSX, XLS (Max 100MB)
+              </small>
+
+              <div id="fileInfo" class="alert alert-secondary mt-3" style="display: none;">
+                <strong>Selected File:</strong> <span id="fileName"></span>
+                <br>
+                <strong>File Size:</strong> <span id="fileSize"></span>
+              </div>
+            </div>
+
+            <div class="form-group mb-4">
+              <label class="form-label fw-bold">Import Instructions</label>
+              <div class="alert alert-light border">
+                <h6 class="fw-bold mb-3">CSV Format:</h6>
+                <pre class="mb-3" style="background: #f5f5f5; padding: 10px; border-radius: 5px; font-size: 0.875rem; overflow-x: auto;">full_name,email,password,role
+John Doe,john@example.com,SecurePass123,user
+Jane Admin,jane@example.com,AdminPass456,admin
+Bob Smith,bob@example.com,BobPass789,user</pre>
+
+                <h6 class="fw-bold mb-2">Required Columns:</h6>
+                <ul class="mb-3">
+                  <li><strong>full_name</strong> - User's full name (2-100 characters)</li>
+                  <li><strong>email</strong> - Valid email address (must be unique)</li>
+                  <li><strong>password</strong> - Minimum 6 characters</li>
+                  <li><strong>role</strong> - Either "user" or "admin"</li>
+                </ul>
+
+                <h6 class="fw-bold mb-2">Guidelines:</h6>
+                <ul class="mb-0">
+                  <li>The first row should contain headers</li>
+                  <li>Email addresses must be unique across the system</li>
+                  <li>Passwords should meet security standards</li>
+                  <li>Invalid rows will be skipped and reported</li>
+                  <li>The import runs asynchronously in the background</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 mb-4">
+              <%= form.submit "Start Import", class: "btn btn-primary btn-lg", data: { disable_with: "Importing..." } %>
+            </div>
+
+            <hr>
+
+            <div class="alert alert-warning">
+              <strong>Important:</strong>
+              <ul class="mb-0 ms-3">
+                <li>Double-check your file before importing to avoid duplicate emails</li>
+                <li>The import process will not modify existing users</li>
+                <li>Failed imports can be retried after fixing the data</li>
+                <li>Track import progress on the <%= link_to "dashboard", admin_dashboard_path, class: "alert-link" %></li>
+              </ul>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Sample Files</h5>
+        </div>
+        <div class="card-body">
+          <p class="text-muted mb-3">Download a sample file to see the expected format:</p>
+
+          <div class="d-grid gap-2">
+            <a href="#" class="btn btn-outline-primary" onclick="downloadSampleCSV(); return false;">
+              Download Sample CSV
+            </a>
+            <a href="#" class="btn btn-outline-primary" onclick="downloadSampleXLSX(); return false;">
+              Download Sample XLSX
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('fileInput');
+    const fileInfo = document.getElementById('fileInfo');
+    const fileName = document.getElementById('fileName');
+    const fileSize = document.getElementById('fileSize');
+
+    if (fileInput) {
+      fileInput.addEventListener('change', function(e) {
+        if (e.target.files.length > 0) {
+          const file = e.target.files[0];
+          fileName.textContent = file.name;
+          fileSize.textContent = formatFileSize(file.size);
+          fileInfo.style.display = 'block';
+        } else {
+          fileInfo.style.display = 'none';
+        }
+      });
+    }
+  });
+
+  function formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+  }
+
+  function downloadSampleCSV() {
+    const csv = `full_name,email,password,role
+John Doe,john@example.com,SecurePass123!,user
+Jane Admin,jane@example.com,AdminPass456!,admin
+Bob Smith,bob@example.com,BobPass789!,user
+Alice Johnson,alice@example.com,AlicePass101!,user`;
+
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'sample_users.csv';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  }
+
+  function downloadSampleXLSX() {
+    alert('XLSX sample download functionality would be implemented with a backend endpoint or library like SheetJS');
+    // In a real implementation, this would generate and download an Excel file
+  }
+</script>

@@ -1,0 +1,256 @@
+<% content_for(:title, "Edit Profile - #{@user.full_name}") %>
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6 fw-bold">Edit My Profile</h1>
+        <div class="action-buttons">
+          <%= link_to "View Profile", profile_path, class: "btn btn-info" %>
+          <% if current_user.admin? %>
+            <%= link_to "Dashboard", admin_dashboard_path, class: "btn btn-outline-secondary" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="card mb-4">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Profile Information</h5>
+        </div>
+        <div class="card-body p-4">
+          <div class="alert alert-info mb-4">
+            <strong>Note:</strong> Update your personal information below. Leave the password fields blank to keep your current password.
+          </div>
+
+          <%= render "shared/errors", object: @user %>
+
+          <%= form_with(model: @user, local: true, url: profile_path, method: :patch, class: "needs-validation") do |form| %>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <%= form.label :full_name, "Full Name", class: "form-label fw-bold" %>
+                  <%= form.text_field :full_name,
+                      class: "form-control #{'is-invalid' if @user.errors[:full_name].present?}",
+                      placeholder: "Enter your full name",
+                      required: true %>
+                  <% if @user.errors[:full_name].present? %>
+                    <div class="invalid-feedback d-block">
+                      <%= @user.errors[:full_name].first %>
+                    </div>
+                  <% end %>
+                  <small class="text-muted d-block mt-1">
+                    How you'll appear in the system
+                  </small>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <%= form.label :email, "Email Address", class: "form-label fw-bold" %>
+                  <%= form.email_field :email,
+                      class: "form-control #{'is-invalid' if @user.errors[:email].present?}",
+                      placeholder: "Enter your email address",
+                      required: true %>
+                  <% if @user.errors[:email].present? %>
+                    <div class="invalid-feedback d-block">
+                      <%= @user.errors[:email].first %>
+                    </div>
+                  <% end %>
+                  <small class="text-muted d-block mt-1">
+                    Must be unique and valid
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <%= form.label :password, "New Password", class: "form-label fw-bold" %>
+                  <%= form.password_field :password,
+                      class: "form-control #{'is-invalid' if @user.errors[:password].present?}",
+                      placeholder: "Leave blank to keep current password",
+                      autocomplete: "new-password" %>
+                  <% if @user.errors[:password].present? %>
+                    <div class="invalid-feedback d-block">
+                      <%= @user.errors[:password].first %>
+                    </div>
+                  <% end %>
+                  <small class="text-muted d-block mt-1">
+                    Minimum 6 characters
+                  </small>
+                </div>
+              </div>
+
+              <div class="col-md-6 mb-3">
+                <div class="form-group">
+                  <%= form.label :password_confirmation, "Confirm New Password", class: "form-label fw-bold" %>
+                  <%= form.password_field :password_confirmation,
+                      class: "form-control #{'is-invalid' if @user.errors[:password_confirmation].present?}",
+                      placeholder: "Confirm your password",
+                      autocomplete: "new-password" %>
+                  <% if @user.errors[:password_confirmation].present? %>
+                    <div class="invalid-feedback d-block">
+                      <%= @user.errors[:password_confirmation].first %>
+                    </div>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-12 mb-3">
+                <div class="form-group">
+                  <%= form.label :avatar_image, "Profile Picture", class: "form-label fw-bold" %>
+                  <div class="input-group">
+                    <%= form.file_field :avatar_image,
+                        class: "form-control #{'is-invalid' if @user.errors[:avatar_image].present?}",
+                        accept: "image/png, image/jpeg, image/gif",
+                        id: "avatarInput" %>
+                    <% if @user.avatar_image.attached? %>
+                      <%= link_to "Remove", avatar_image_attachment_path(@user.avatar_image), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
+                    <% end %>
+                  </div>
+                  <% if @user.errors[:avatar_image].present? %>
+                    <div class="invalid-feedback d-block">
+                      <%= @user.errors[:avatar_image].first %>
+                    </div>
+                  <% end %>
+                  <small class="text-muted d-block mt-1">
+                    PNG, JPEG, or GIF. Maximum 5MB. Leave empty to keep current photo.
+                  </small>
+                </div>
+              </div>
+            </div>
+
+            <!-- Current Avatar Display -->
+            <% if @user.avatar_image.attached? %>
+              <div class="row mb-3">
+                <div class="col-12">
+                  <label class="form-label fw-bold d-block">Current Profile Picture</label>
+                  <%= image_tag @user.avatar_image, alt: @user.full_name, class: "avatar-preview" %>
+                </div>
+              </div>
+            <% end %>
+
+            <!-- Avatar Preview for New Upload -->
+            <div id="avatarPreview" class="mb-4" style="display: none;">
+              <label class="form-label fw-bold d-block">Preview New Picture</label>
+              <img id="previewImage" src="" alt="Avatar preview" class="avatar-preview" style="display: none;">
+            </div>
+
+            <div class="form-group mt-4 d-flex gap-2">
+              <%= form.submit "Save Changes", class: "btn btn-primary btn-lg", data: { disable_with: "Saving..." } %>
+              <%= link_to "Cancel", profile_path, class: "btn btn-secondary btn-lg" %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Account Status</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div>
+                <strong class="text-muted small text-uppercase">Email</strong>
+                <p class="mb-0"><%= @user.email %></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div>
+                <strong class="text-muted small text-uppercase">Account Type</strong>
+                <p class="mb-0">
+                  <% if @user.admin? %>
+                    <span class="badge bg-danger">Administrator</span>
+                  <% else %>
+                    <span class="badge bg-secondary">Regular User</span>
+                  <% end %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div>
+                <strong class="text-muted small text-uppercase">Member Since</strong>
+                <p class="text-muted small mb-0">
+                  <%= @user.created_at.strftime("%B %d, %Y") %>
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div>
+                <strong class="text-muted small text-uppercase">Last Updated</strong>
+                <p class="text-muted small mb-0">
+                  <%= @user.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <hr>
+
+          <div class="alert alert-danger">
+            <strong>Danger Zone:</strong>
+            <p class="mb-0 mt-2">
+              Permanently delete your account and all associated data. This action cannot be undone.
+            </p>
+          </div>
+
+          <div class="d-grid gap-2">
+            <%= button_to "Delete My Account", profile_path, method: :delete, class: "btn btn-danger btn-lg", data: { confirm: "Are you absolutely sure? Your account will be permanently deleted and all data will be removed. This cannot be undone.", disable_with: "Deleting..." } %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const avatarInput = document.getElementById('avatarInput');
+    const previewImage = document.getElementById('previewImage');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    if (avatarInput) {
+      avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            previewImage.src = event.target.result;
+            previewImage.style.display = 'block';
+            avatarPreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewImage.style.display = 'none';
+          avatarPreview.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>
+
+<style>
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .action-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .action-buttons .btn {
+      width: 100%;
+    }
+  }
+</style>

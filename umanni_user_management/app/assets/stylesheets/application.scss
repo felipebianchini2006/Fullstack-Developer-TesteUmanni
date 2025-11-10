@@ -1,1 +1,27 @@
-// Sassy
+/*
+ * Application Styles
+ * Using SCSS with Bootstrap 5
+ */
+
+// Variables
+@import "variables";
+
+// Bootstrap
+@import "bootstrap";
+
+// Base styles
+@import "base/reset";
+@import "base/typography";
+
+// Components
+@import "components/buttons";
+@import "components/forms";
+@import "components/cards";
+@import "components/navbar";
+@import "components/alerts";
+
+// Pages
+@import "pages/dashboard";
+@import "pages/users";
+@import "pages/profile";
+@import "pages/auth";

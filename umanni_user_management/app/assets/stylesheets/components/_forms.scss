@@ -1,0 +1,69 @@
+// Form styles
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.avatar-preview {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #dee2e6;
+  margin: 1rem 0;
+}
+
+.file-input-wrapper {
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+
+  .file-input-button {
+    border: 1px solid #dee2e6;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    background-color: #f8f9fa;
+    border-radius: 0.25rem;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+  }
+
+  input[type="file"] {
+    font-size: 100px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+  }
+}
+
+.error-messages {
+  background-color: rgba($danger, 0.1);
+  border: 1px solid rgba($danger, 0.3);
+  border-radius: $border-radius;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+
+  h3 {
+    color: $danger;
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  ul {
+    margin: 0;
+    padding-left: 1.5rem;
+
+    li {
+      color: $danger;
+    }
+  }
+}

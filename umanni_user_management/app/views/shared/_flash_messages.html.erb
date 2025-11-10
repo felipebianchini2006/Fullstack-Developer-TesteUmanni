@@ -1,0 +1,29 @@
+<div class="container-fluid mt-3">
+  <% if notice.present? %>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+      <strong>Success!</strong> <%= notice %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+
+  <% if alert.present? %>
+    <div class="alert alert-danger alert-dismissible fade show alert-persistent" role="alert">
+      <strong>Error!</strong> <%= alert %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+
+  <% if flash[:warning].present? %>
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Warning!</strong> <%= flash[:warning] %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+
+  <% if flash[:info].present? %>
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <strong>Info:</strong> <%= flash[:info] %>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  <% end %>
+</div>

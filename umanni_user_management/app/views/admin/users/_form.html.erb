@@ -1,0 +1,166 @@
+<%= render "shared/errors", object: @user %>
+
+<%= form_with(model: [@user], local: true, class: "needs-validation") do |form| %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <%= form.label :full_name, "Full Name", class: "form-label fw-bold" %>
+        <%= form.text_field :full_name,
+            class: "form-control #{'is-invalid' if @user.errors[:full_name].present?}",
+            placeholder: "Enter full name",
+            required: true %>
+        <% if @user.errors[:full_name].present? %>
+          <div class="invalid-feedback d-block">
+            <%= @user.errors[:full_name].first %>
+          </div>
+        <% end %>
+        <small class="text-muted d-block mt-1">
+          Minimum 2 characters, maximum 100 characters
+        </small>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <%= form.label :email, "Email Address", class: "form-label fw-bold" %>
+        <%= form.email_field :email,
+            class: "form-control #{'is-invalid' if @user.errors[:email].present?}",
+            placeholder: "Enter email address",
+            required: true %>
+        <% if @user.errors[:email].present? %>
+          <div class="invalid-feedback d-block">
+            <%= @user.errors[:email].first %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <%= form.label :password, "Password", class: "form-label fw-bold" %>
+        <%= form.password_field :password,
+            class: "form-control #{'is-invalid' if @user.errors[:password].present?}",
+            placeholder: "Enter password",
+            autocomplete: "new-password" %>
+        <% if @user.errors[:password].present? %>
+          <div class="invalid-feedback d-block">
+            <%= @user.errors[:password].first %>
+          </div>
+        <% end %>
+        <small class="text-muted d-block mt-1">
+          <% if @user.new_record? %>
+            Required for new users
+          <% else %>
+            Leave blank to keep current password
+          <% end %>
+        </small>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <%= form.label :password_confirmation, "Confirm Password", class: "form-label fw-bold" %>
+        <%= form.password_field :password_confirmation,
+            class: "form-control #{'is-invalid' if @user.errors[:password_confirmation].present?}",
+            placeholder: "Confirm password",
+            autocomplete: "new-password" %>
+        <% if @user.errors[:password_confirmation].present? %>
+          <div class="invalid-feedback d-block">
+            <%= @user.errors[:password_confirmation].first %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <%= form.label :role, "User Role", class: "form-label fw-bold" %>
+        <%= form.select :role,
+            [["Regular User", "user"], ["Admin", "admin"]],
+            { selected: @user.role || "user" },
+            class: "form-select #{'is-invalid' if @user.errors[:role].present?}" %>
+        <% if @user.errors[:role].present? %>
+          <div class="invalid-feedback d-block">
+            <%= @user.errors[:role].first %>
+          </div>
+        <% end %>
+        <small class="text-muted d-block mt-1">
+          Admins have access to the dashboard and user management features
+        </small>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <div class="form-group">
+        <%= form.label :avatar_image, "Profile Picture", class: "form-label fw-bold" %>
+        <div class="input-group">
+          <%= form.file_field :avatar_image,
+              class: "form-control #{'is-invalid' if @user.errors[:avatar_image].present?}",
+              accept: "image/png, image/jpeg, image/gif",
+              id: "avatarInput" %>
+          <% if @user.avatar_image.attached? && !@user.new_record? %>
+            <%= link_to "Remove", avatar_image_attachment_path(@user.avatar_image), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
+          <% end %>
+        </div>
+        <% if @user.errors[:avatar_image].present? %>
+          <div class="invalid-feedback d-block">
+            <%= @user.errors[:avatar_image].first %>
+          </div>
+        <% end %>
+        <small class="text-muted d-block mt-1">
+          PNG, JPEG, or GIF. Max 5MB
+        </small>
+      </div>
+    </div>
+  </div>
+
+  <!-- Avatar Preview -->
+  <% if @user.avatar_image.attached? && !@user.new_record? %>
+    <div class="row mb-3">
+      <div class="col-12">
+        <label class="form-label fw-bold d-block">Current Avatar</label>
+        <%= image_tag @user.avatar_image, alt: @user.full_name, class: "avatar-preview" %>
+      </div>
+    </div>
+  <% end %>
+
+  <div id="avatarPreview" class="mb-3" style="display: none;">
+    <label class="form-label fw-bold d-block">Avatar Preview</label>
+    <img id="previewImage" src="" alt="Avatar preview" class="avatar-preview" style="display: none;">
+  </div>
+
+  <div class="form-group mt-4 d-flex gap-2">
+    <%= form.submit "Save User", class: "btn btn-primary btn-lg", data: { disable_with: "Saving..." } %>
+    <%= link_to "Cancel", admin_users_path, class: "btn btn-secondary btn-lg" %>
+  </div>
+<% end %>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const avatarInput = document.getElementById('avatarInput');
+    const previewImage = document.getElementById('previewImage');
+    const avatarPreview = document.getElementById('avatarPreview');
+
+    if (avatarInput) {
+      avatarInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            previewImage.src = event.target.result;
+            previewImage.style.display = 'block';
+            avatarPreview.style.display = 'block';
+          };
+          reader.readAsDataURL(file);
+        } else {
+          previewImage.style.display = 'none';
+          avatarPreview.style.display = 'none';
+        }
+      });
+    }
+  });
+</script>

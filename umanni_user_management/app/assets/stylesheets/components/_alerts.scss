@@ -1,0 +1,81 @@
+// Alert styles
+.flash-messages {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  min-width: 300px;
+  max-width: 500px;
+
+  .alert {
+    box-shadow: $box-shadow;
+    animation: slideIn 0.3s ease-out;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.import-progress {
+  background: white;
+  border: 1px solid #dee2e6;
+  border-radius: $border-radius;
+  padding: 1.5rem;
+  margin-top: 1rem;
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+
+    h4 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .progress-percentage {
+      font-weight: 700;
+      color: $primary;
+    }
+  }
+
+  .progress {
+    height: 2rem;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .progress-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+
+      .label {
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+      }
+
+      .value {
+        font-weight: 600;
+        font-size: 1rem;
+        margin-top: 0.25rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+<% content_for(:title, "Home - Umanni User Management") %>
+
+<div class="container-fluid py-5">
+  <div class="row align-items-center justify-content-center" style="min-height: calc(100vh - 76px);">
+    <div class="col-md-8 col-lg-6 text-center">
+      <div class="mb-4">
+        <div class="display-4 fw-bold text-dark mb-3">
+          Welcome to Umanni
+        </div>
+        <p class="lead text-muted mb-4">
+          A modern user management system built with Rails, Bootstrap 5, and cutting-edge technologies
+        </p>
+      </div>
+
+      <div class="card border-0 shadow-lg p-4 mb-4">
+        <p class="text-muted mb-4">
+          Please sign in to your account to get started
+        </p>
+
+        <div class="d-grid gap-2">
+          <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary btn-lg mb-2" %>
+          <%= link_to "Create Account", new_user_registration_path, class: "btn btn-outline-primary btn-lg" %>
+        </div>
+      </div>
+
+      <div class="row mt-5">
+        <div class="col-md-6 mb-3 mb-md-0">
+          <div class="feature-card p-3">
+            <h5 class="fw-bold mb-2">Real-Time Updates</h5>
+            <p class="small text-muted">
+              Experience instant updates with Action Cable and Turbo
+            </p>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="feature-card p-3">
+            <h5 class="fw-bold mb-2">Responsive Design</h5>
+            <p class="small text-muted">
+              Works perfectly on all devices with Bootstrap 5
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .feature-card {
+    background: white;
+    border-radius: 0.5rem;
+    border-left: 4px solid #007bff;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .feature-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  }
+</style>

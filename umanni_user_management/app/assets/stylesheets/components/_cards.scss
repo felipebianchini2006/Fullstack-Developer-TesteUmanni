@@ -1,0 +1,104 @@
+// Card styles
+.stat-card {
+  border-radius: $border-radius;
+  border: 1px solid #dee2e6;
+  padding: 1.5rem;
+  background: white;
+  box-shadow: $box-shadow-sm;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: $box-shadow;
+    transform: translateY(-2px);
+  }
+
+  .stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+
+    &.primary {
+      background-color: rgba($primary, 0.1);
+      color: $primary;
+    }
+
+    &.success {
+      background-color: rgba($success, 0.1);
+      color: $success;
+    }
+
+    &.info {
+      background-color: rgba($info, 0.1);
+      color: $info;
+    }
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-label {
+    color: #6c757d;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid #dee2e6;
+  border-radius: $border-radius;
+  margin-bottom: 0.5rem;
+  background: white;
+
+  .user-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1rem;
+    background-color: #dee2e6;
+  }
+
+  .user-info {
+    flex: 1;
+
+    .user-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .user-email {
+      color: #6c757d;
+      font-size: 0.875rem;
+    }
+  }
+
+  .user-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.admin {
+      background-color: rgba($primary, 0.1);
+      color: $primary;
+    }
+
+    &.user {
+      background-color: rgba($secondary, 0.1);
+      color: $secondary;
+    }
+  }
+}

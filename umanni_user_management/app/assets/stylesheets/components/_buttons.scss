@@ -1,0 +1,17 @@
+// Button styles
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-danger-soft {
+  background-color: rgba($danger, 0.1);
+  color: $danger;
+  border: 1px solid rgba($danger, 0.2);
+
+  &:hover {
+    background-color: rgba($danger, 0.2);
+    color: $danger;
+  }
+}

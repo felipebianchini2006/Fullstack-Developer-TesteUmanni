@@ -1,0 +1,222 @@
+<% content_for(:title, "My Profile - #{@user.full_name}") %>
+
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="display-6 fw-bold">My Profile</h1>
+        <div class="action-buttons">
+          <%= link_to "Edit Profile", edit_profile_path, class: "btn btn-primary" %>
+          <% if current_user.admin? %>
+            <%= link_to "Dashboard", admin_dashboard_path, class: "btn btn-info" %>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <div class="card text-center">
+            <div class="card-body py-5">
+              <% if @user.avatar_image.attached? %>
+                <%= image_tag @user.avatar_image, alt: @user.full_name, class: "avatar-md mb-3" %>
+              <% else %>
+                <div
+                  class="avatar-md mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary"
+                  style="color: white; font-size: 3rem; font-weight: bold;"
+                >
+                  <%= @user.full_name.split.map(&:first).join %>
+                </div>
+              <% end %>
+
+              <h4 class="fw-bold mb-1"><%= @user.full_name %></h4>
+              <p class="text-muted mb-3"><%= @user.email %></p>
+
+              <div class="mb-4">
+                <% if @user.admin? %>
+                  <span class="badge bg-danger badge-lg">Administrator</span>
+                <% else %>
+                  <span class="badge bg-secondary badge-lg">Regular User</span>
+                <% end %>
+              </div>
+
+              <div class="d-grid gap-2">
+                <%= link_to "Edit Profile", edit_profile_path, class: "btn btn-primary" %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-8">
+          <div class="card mb-4">
+            <div class="card-header bg-light border-bottom">
+              <h5 class="mb-0 fw-bold">Personal Information</h5>
+            </div>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div>
+                    <strong class="text-muted small text-uppercase">Full Name</strong>
+                    <p class="mb-0"><%= @user.full_name %></p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div>
+                    <strong class="text-muted small text-uppercase">Email Address</strong>
+                    <p class="mb-0">
+                      <%= link_to @user.email, "mailto:#{@user.email}" %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row mb-4">
+                <div class="col-md-6">
+                  <div>
+                    <strong class="text-muted small text-uppercase">Account Role</strong>
+                    <p class="mb-0">
+                      <% if @user.admin? %>
+                        <span class="badge bg-danger">Administrator</span>
+                        <br>
+                        <small class="text-muted">You have full access to all features</small>
+                      <% else %>
+                        <span class="badge bg-secondary">Regular User</span>
+                        <br>
+                        <small class="text-muted">You can manage your profile</small>
+                      <% end %>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div>
+                    <strong class="text-muted small text-uppercase">Avatar</strong>
+                    <p class="mb-0">
+                      <% if @user.avatar_image.attached? %>
+                        <span class="badge bg-success">Uploaded</span>
+                        <br>
+                        <small class="text-muted">
+                          <%= link_to "Change", edit_profile_path %>
+                        </small>
+                      <% else %>
+                        <span class="badge bg-secondary">Not set</span>
+                        <br>
+                        <small class="text-muted">
+                          <%= link_to "Add one", edit_profile_path %>
+                        </small>
+                      <% end %>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <hr>
+
+              <div>
+                <strong class="text-muted small text-uppercase">Account Timestamps</strong>
+                <div class="mt-2">
+                  <p class="mb-2">
+                    <strong>Created:</strong>
+                    <br>
+                    <small class="text-muted">
+                      <%= @user.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+                    </small>
+                  </p>
+                  <p class="mb-0">
+                    <strong>Last Updated:</strong>
+                    <br>
+                    <small class="text-muted">
+                      <%= @user.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+                    </small>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header bg-light border-bottom">
+              <h5 class="mb-0 fw-bold">Account Settings</h5>
+            </div>
+            <div class="card-body">
+              <p class="text-muted mb-3">
+                You can manage your account settings from here. Click the button below to edit your profile information.
+              </p>
+
+              <div class="d-grid gap-2">
+                <%= link_to "Edit Profile Information", edit_profile_path, class: "btn btn-primary btn-lg mb-2" %>
+              </div>
+
+              <hr>
+
+              <div class="alert alert-danger">
+                <strong>Danger Zone:</strong>
+                <p class="mb-0 mt-2">
+                  Deleting your account is permanent and cannot be undone. All of your data will be removed from the system.
+                </p>
+              </div>
+
+              <div class="d-grid gap-2">
+                <%= button_to "Delete My Account", profile_path, method: :delete, class: "btn btn-danger btn-lg", data: { confirm: "Are you absolutely sure? This action cannot be undone and will permanently delete your account.", disable_with: "Deleting..." } %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <% if current_user.admin? %>
+        <div class="card">
+          <div class="card-header bg-light border-bottom">
+            <h5 class="mb-0 fw-bold">Administrator Options</h5>
+          </div>
+          <div class="card-body">
+            <p class="text-muted mb-3">
+              As an administrator, you have access to additional features and tools for managing the system.
+            </p>
+
+            <div class="d-grid gap-2 gap-md-0">
+              <%= link_to "Go to Dashboard", admin_dashboard_path, class: "btn btn-info btn-lg" %>
+              <%= link_to "Manage Users", admin_users_path, class: "btn btn-outline-info btn-lg" %>
+              <%= link_to "Import Users", import_admin_users_path, class: "btn btn-outline-info btn-lg" %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<style>
+  .badge-lg {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .action-buttons {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .action-buttons .btn {
+      width: 100%;
+    }
+  }
+
+  .d-grid.gap-md-0 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .d-grid.gap-md-0 {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>

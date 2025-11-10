@@ -1,0 +1,217 @@
+<% content_for(:title, "User Details - #{@user.full_name}") %>
+
+<div class="container-fluid py-4">
+  <div class="row mb-4">
+    <div class="col-12">
+      <div class="d-flex justify-content-between align-items-center">
+        <h1 class="display-6 fw-bold mb-2"><%= @user.full_name %></h1>
+        <div class="action-buttons">
+          <%= link_to "Edit", edit_admin_user_path(@user), class: "btn btn-primary" %>
+          <% if current_user.admin? && current_user != @user %>
+            <%= button_to "Toggle Role", toggle_role_admin_user_path(@user), method: :patch, class: "btn btn-warning", data: { disable_with: "..." } %>
+            <%= button_to "Delete", admin_user_path(@user), method: :delete, class: "btn btn-danger", data: { confirm: "Are you sure? This cannot be undone.", disable_with: "..." } %>
+          <% end %>
+          <%= link_to "Back to Users", admin_users_path, class: "btn btn-outline-secondary" %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        <div class="card-body text-center py-5">
+          <% if @user.avatar_image.attached? %>
+            <%= image_tag @user.avatar_image, alt: @user.full_name, class: "avatar-md mb-3" %>
+          <% else %>
+            <div
+              class="avatar-md mx-auto mb-3 d-flex align-items-center justify-content-center bg-secondary"
+              style="color: white; font-size: 3rem; font-weight: bold;"
+            >
+              <%= @user.full_name.split.map(&:first).join %>
+            </div>
+          <% end %>
+
+          <h4 class="fw-bold mb-1"><%= @user.full_name %></h4>
+          <p class="text-muted mb-3"><%= @user.email %></p>
+
+          <div class="mb-4">
+            <% if @user.admin? %>
+              <span class="badge bg-danger badge-lg badge-role">Admin</span>
+            <% else %>
+              <span class="badge bg-secondary badge-lg badge-role">Regular User</span>
+            <% end %>
+          </div>
+
+          <hr>
+
+          <div class="text-start">
+            <p class="mb-2">
+              <strong>Account Status:</strong>
+              <span class="badge bg-success">Active</span>
+            </p>
+            <p class="mb-2">
+              <strong>Member Since:</strong>
+              <br>
+              <small class="text-muted">
+                <%= @user.created_at.strftime("%B %d, %Y") %>
+              </small>
+            </p>
+            <p class="mb-2">
+              <strong>Last Updated:</strong>
+              <br>
+              <small class="text-muted">
+                <%= @user.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+              </small>
+            </p>
+            <p class="mb-0">
+              <strong>Account ID:</strong>
+              <br>
+              <small class="text-muted font-monospace">
+                <%= @user.id %>
+              </small>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mt-3">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Account Details</h5>
+        </div>
+        <div class="card-body">
+          <div class="mb-3">
+            <strong class="text-muted small text-uppercase">Full Name</strong>
+            <p class="mb-0"><%= @user.full_name %></p>
+          </div>
+
+          <div class="mb-3">
+            <strong class="text-muted small text-uppercase">Email Address</strong>
+            <p class="mb-0">
+              <%= link_to @user.email, "mailto:#{@user.email}" %>
+            </p>
+          </div>
+
+          <div class="mb-3">
+            <strong class="text-muted small text-uppercase">Role</strong>
+            <p class="mb-0">
+              <% if @user.admin? %>
+                <span class="badge bg-danger">Administrator</span>
+                <br>
+                <small class="text-muted">Full access to all features</small>
+              <% else %>
+                <span class="badge bg-secondary">Regular User</span>
+                <br>
+                <small class="text-muted">Standard access</small>
+              <% end %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-8">
+      <div class="card mb-4">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Profile Information</h5>
+        </div>
+        <div class="card-body">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label text-muted small fw-bold">Full Name</label>
+                <p class="form-control-plaintext"><%= @user.full_name %></p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label text-muted small fw-bold">Email</label>
+                <p class="form-control-plaintext"><%= @user.email %></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label text-muted small fw-bold">Account Created</label>
+                <p class="form-control-plaintext">
+                  <%= @user.created_at.strftime("%B %d, %Y at %I:%M %p") %>
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label text-muted small fw-bold">Last Updated</label>
+                <p class="form-control-plaintext">
+                  <%= @user.updated_at.strftime("%B %d, %Y at %I:%M %p") %>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label text-muted small fw-bold">Role</label>
+                <p class="form-control-plaintext">
+                  <% if @user.admin? %>
+                    <span class="badge bg-danger badge-lg">Administrator</span>
+                  <% else %>
+                    <span class="badge bg-secondary badge-lg">Regular User</span>
+                  <% end %>
+                </p>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="form-label text-muted small fw-bold">Avatar</label>
+                <p class="form-control-plaintext">
+                  <% if @user.avatar_image.attached? %>
+                    <span class="badge bg-success">Uploaded</span>
+                  <% else %>
+                    <span class="badge bg-secondary">Not set</span>
+                  <% end %>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header bg-light border-bottom">
+          <h5 class="mb-0 fw-bold">Actions</h5>
+        </div>
+        <div class="card-body">
+          <div class="alert alert-info mb-3">
+            <strong>Administrator Actions:</strong> You can edit this user's information or change their role status below.
+          </div>
+
+          <div class="d-grid gap-2">
+            <%= link_to "Edit User Details", edit_admin_user_path(@user), class: "btn btn-primary btn-lg" %>
+
+            <% if current_user.admin? && current_user != @user %>
+              <div class="alert alert-warning mt-3">
+                <strong>Danger Zone:</strong>
+              </div>
+              <% if @user.admin? %>
+                <%= button_to "Demote to Regular User", toggle_role_admin_user_path(@user), method: :patch, class: "btn btn-warning btn-lg", data: { disable_with: "Processing..." } %>
+              <% else %>
+                <%= button_to "Promote to Admin", toggle_role_admin_user_path(@user), method: :patch, class: "btn btn-warning btn-lg", data: { disable_with: "Processing..." } %>
+              <% end %>
+              <%= button_to "Delete This User", admin_user_path(@user), method: :delete, class: "btn btn-danger btn-lg", data: { confirm: "Are you absolutely sure? This action cannot be undone.", disable_with: "Deleting..." } %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .badge-lg {
+    padding: 0.5rem 1rem;
+    font-size: 0.95rem;
+  }
+</style>
