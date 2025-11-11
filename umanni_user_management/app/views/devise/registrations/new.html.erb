@@ -1,0 +1,66 @@
+<div class="auth-page">
+  <div class="row justify-content-center">
+    <div class="col-md-6 col-lg-5">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Create Account</h2>
+          <p class="text-center text-muted mb-4">Join us today and get started</p>
+
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "needs-validation" }) do |f| %>
+          <%= render "devise/shared/error_messages", resource: resource %>
+
+          <div class="mb-3">
+            <%= f.label :full_name, "Full Name", class: "form-label fw-bold" %>
+            <%= f.text_field :full_name,
+                autofocus: true,
+                autocomplete: "name",
+                class: "form-control",
+                placeholder: "Enter your full name",
+                required: true %>
+            <small class="text-muted">Minimum 2 characters, maximum 100 characters</small>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :email, "Email Address", class: "form-label fw-bold" %>
+            <%= f.email_field :email,
+                autocomplete: "email",
+                class: "form-control",
+                placeholder: "Enter your email",
+                required: true %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, "Password", class: "form-label fw-bold" %>
+            <%= f.password_field :password,
+                autocomplete: "new-password",
+                class: "form-control",
+                placeholder: "Enter password",
+                required: true %>
+            <% if @minimum_password_length %>
+              <small class="text-muted">
+                <%= @minimum_password_length %> characters minimum
+              </small>
+            <% end %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password_confirmation, "Confirm Password", class: "form-label fw-bold" %>
+            <%= f.password_field :password_confirmation,
+                autocomplete: "new-password",
+                class: "form-control",
+                placeholder: "Confirm your password",
+                required: true %>
+          </div>
+
+          <div class="d-grid gap-2 mb-3">
+            <%= f.submit "Create Account", class: "btn btn-primary btn-lg", data: { disable_with: "Creating account..." } %>
+          </div>
+        <% end %>
+
+        <div class="text-center mt-4">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

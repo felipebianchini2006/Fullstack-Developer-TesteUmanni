@@ -33,6 +33,14 @@ class ProfilesController < ApplicationController
     end
   end
 
+  def remove_avatar
+    @user = current_user
+    authorize @user
+
+    @user.avatar_image.purge if @user.avatar_image.attached?
+    redirect_to edit_profile_path, notice: "Avatar was successfully removed."
+  end
+
   private
 
   def user_params

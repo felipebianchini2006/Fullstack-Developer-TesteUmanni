@@ -5,7 +5,9 @@ Rails.application.routes.draw do
   root "home#index"
 
   # Profile routes
-  resource :profile, only: [:show, :edit, :update, :destroy]
+  resource :profile, only: [:show, :edit, :update, :destroy] do
+    delete :remove_avatar, on: :collection
+  end
 
   # Admin namespace
   namespace :admin do
@@ -14,6 +16,7 @@ Rails.application.routes.draw do
     resources :users do
       member do
         patch :toggle_role
+        delete :remove_avatar
       end
       collection do
         get :import

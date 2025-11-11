@@ -1,54 +1,89 @@
-// Card styles
-.stat-card {
+// Card styles - Minimalist design
+.card {
+  border: 1px solid $border-color;
   border-radius: $border-radius;
-  border: 1px solid #dee2e6;
-  padding: 1.5rem;
-  background: white;
   box-shadow: $box-shadow-sm;
-  transition: all 0.3s ease;
+  transition: $transition-base;
+  overflow: hidden;
 
   &:hover {
     box-shadow: $box-shadow;
-    transform: translateY(-2px);
+  }
+}
+
+.stat-card {
+  border-radius: $border-radius;
+  border: 1px solid $border-color;
+  padding: 2rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: $box-shadow-sm;
+  transition: $transition-base;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, $primary, lighten($primary, 15%));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  &:hover {
+    box-shadow: $box-shadow;
+    transform: translateY(-4px);
+    border-color: darken($border-color, 5%);
+
+    &::before {
+      opacity: 1;
+    }
   }
 
   .stat-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    border-radius: $border-radius-sm;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.75rem;
+    margin-bottom: 1.25rem;
+    transition: $transition-base;
 
     &.primary {
-      background-color: rgba($primary, 0.1);
+      background: linear-gradient(135deg, rgba($primary, 0.1), rgba($primary, 0.05));
       color: $primary;
     }
 
     &.success {
-      background-color: rgba($success, 0.1);
+      background: linear-gradient(135deg, rgba($success, 0.1), rgba($success, 0.05));
       color: $success;
     }
 
     &.info {
-      background-color: rgba($info, 0.1);
+      background: linear-gradient(135deg, rgba($info, 0.1), rgba($info, 0.05));
       color: $info;
     }
   }
 
   .stat-value {
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: 700;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.5rem;
+    color: $dark;
+    letter-spacing: -0.02em;
   }
 
   .stat-label {
-    color: #6c757d;
-    font-size: 0.875rem;
+    color: $secondary;
+    font-size: 0.8125rem;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.08em;
+    font-weight: 600;
   }
 }
 

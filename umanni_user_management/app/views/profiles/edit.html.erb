@@ -108,7 +108,7 @@
                         accept: "image/png, image/jpeg, image/gif",
                         id: "avatarInput" %>
                     <% if @user.avatar_image.attached? %>
-                      <%= link_to "Remove", avatar_image_attachment_path(@user.avatar_image), method: :delete, data: { confirm: "Are you sure?" }, class: "btn btn-outline-danger" %>
+                      <%= link_to "Remove", remove_avatar_profile_path, method: :delete, data: { turbo_method: :delete, turbo_confirm: "Are you sure you want to remove your avatar?" }, class: "btn btn-outline-danger" %>
                     <% end %>
                   </div>
                   <% if @user.errors[:avatar_image].present? %>

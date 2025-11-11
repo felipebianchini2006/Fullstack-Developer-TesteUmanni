@@ -1,0 +1,47 @@
+<div class="auth-page">
+  <div class="row justify-content-center">
+    <div class="col-md-5 col-lg-4">
+      <div class="card">
+        <div class="card-body">
+          <h2 class="card-title text-center mb-4">Welcome Back</h2>
+          <p class="text-center text-muted mb-4">Sign in to continue to your account</p>
+
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "needs-validation" }) do |f| %>
+          <div class="mb-3">
+            <%= f.label :email, "Email Address", class: "form-label fw-bold" %>
+            <%= f.email_field :email,
+                autofocus: true,
+                autocomplete: "email",
+                class: "form-control",
+                placeholder: "Enter your email",
+                required: true %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, "Password", class: "form-label fw-bold" %>
+            <%= f.password_field :password,
+                autocomplete: "current-password",
+                class: "form-control",
+                placeholder: "Enter your password",
+                required: true %>
+          </div>
+
+          <% if devise_mapping.rememberable? %>
+            <div class="form-check mb-3">
+              <%= f.check_box :remember_me, class: "form-check-input" %>
+              <%= f.label :remember_me, "Remember me", class: "form-check-label" %>
+            </div>
+          <% end %>
+
+          <div class="d-grid gap-2 mb-3">
+            <%= f.submit "Log in", class: "btn btn-primary btn-lg", data: { disable_with: "Signing in..." } %>
+          </div>
+        <% end %>
+
+        <div class="text-center mt-4">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

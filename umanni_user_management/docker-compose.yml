@@ -53,6 +53,17 @@ services:
     stdin_open: true
     tty: true
 
+  css:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: bundle exec rails dartsass:watch
+    volumes:
+      - .:/rails
+      - bundle_cache:/usr/local/bundle
+    environment:
+      RAILS_ENV: development
+
   sidekiq:
     build:
       context: .

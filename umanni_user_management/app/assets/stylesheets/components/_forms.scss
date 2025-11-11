@@ -1,4 +1,4 @@
-// Form styles
+// Form styles - Clean and minimalist
 .form-group {
   margin-bottom: 1.5rem;
 }
@@ -6,15 +6,56 @@
 .form-label {
   font-weight: 600;
   margin-bottom: 0.5rem;
+  color: $dark;
+  font-size: 0.875rem;
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+.form-control {
+  border-radius: $border-radius-sm;
+  border: 1px solid $input-border-color;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.9375rem;
+  transition: $transition-base;
+  background-color: #ffffff;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: #94a3b8;
+  }
+}
+
+.form-select {
+  border-radius: $border-radius-sm;
+  border: 1px solid $input-border-color;
+  padding: 0.625rem 0.875rem;
+  transition: $transition-base;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.1);
+  }
 }
 
 .avatar-preview {
   width: 150px;
   height: 150px;
-  border-radius: 50%;
+  border-radius: $border-radius;
   object-fit: cover;
-  border: 3px solid #dee2e6;
+  border: 2px solid $border-color;
   margin: 1rem 0;
+  box-shadow: $box-shadow-sm;
+  transition: $transition-base;
+
+  &:hover {
+    box-shadow: $box-shadow;
+  }
 }
 
 .file-input-wrapper {

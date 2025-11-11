@@ -103,10 +103,18 @@ module Admin
         status: :pending
       )
 
-      # Enqueue Sidekiq job
-      UserImportJob.perform_async(import_job.id, params[:file].read)
+      # Enqueue background job
+      UserImportJob.perform_later(import_job.id, params[:file].read)
 
       redirect_to admin_dashboard_path, notice: "Import started. You can track progress on the dashboard."
+    end
+
+    def remove_avatar
+      @user = User.find(params[:id])
+      authorize @user
+
+      @user.avatar_image.purge if @user.avatar_image.attached?
+      redirect_to edit_admin_user_path(@user), notice: "Avatar was successfully removed."
     end
 
     private

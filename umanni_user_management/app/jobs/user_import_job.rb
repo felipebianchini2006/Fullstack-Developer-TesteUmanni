@@ -35,6 +35,7 @@ class UserImportJob < ApplicationJob
       name_col = headers.index { |h| h.downcase == "full_name" }
       email_col = headers.index { |h| h.downcase == "email" }
       role_col = headers.index { |h| h.downcase == "role" }
+      password_col = headers.index { |h| h&.downcase == "password" }
       avatar_col = headers.index { |h| h&.downcase == "avatar_url" }
 
       total_records = spreadsheet.last_row - 1
@@ -51,18 +52,22 @@ class UserImportJob < ApplicationJob
         full_name = row[name_col]&.to_s&.strip
         email = row[email_col]&.to_s&.strip
         role = row[role_col]&.to_s&.strip&.downcase || "user"
+        password = password_col ? row[password_col]&.to_s&.strip : nil
         avatar_url = avatar_col ? row[avatar_col]&.to_s&.strip : nil
 
         # Validate role
         role = "user" unless ["admin", "user"].include?(role)
+
+        # Use provided password or generate random one
+        random_password = password.present? ? password : SecureRandom.hex(8)
 
         # Create user
         user = User.new(
           full_name: full_name,
           email: email,
           role: role,
-          password: SecureRandom.hex(8), # Generate random password
-          password_confirmation: SecureRandom.hex(8)
+          password: random_password,
+          password_confirmation: random_password
         )
 
         # Attach avatar from URL if provided

@@ -18,4 +18,9 @@ module ApplicationHelper
       "https://ui-avatars.com/api/?name=#{user.full_name.gsub(' ', '+')}&size=#{size}&background=random"
     end
   end
+
+  def percentage_of(value, total)
+    return 0 if total.zero?
+    ((value.to_f / total) * 100).round(1)
+  end
 end
